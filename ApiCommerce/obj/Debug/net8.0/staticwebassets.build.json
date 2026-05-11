@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "SNVBBIGAs+lEPs0JtzpSCZt2k4OJTE0rK0OB1/uVRPE=",
+  "Source": "ApiCommerce",
+  "BasePath": "_content/ApiCommerce",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
