@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 
-namespace ApiCommerce.Model.Dtos;
+namespace ApiCommerce.Model;
 
 public class Category
 {
