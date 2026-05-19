@@ -2,7 +2,7 @@ using ApiCommerce.Model;
 using ApiCommerce.Model.Dtos;
 using AutoMapper;
 
-namespace ApiCommerce.Mapping;
+namespace ApiCommerce.Mapping.CategoryProfile;
 
 public class CategoryProfile : Profile
 {
