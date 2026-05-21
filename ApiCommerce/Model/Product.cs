@@ -20,8 +20,8 @@ public class Product
     [Required]
     public string SKU {get; set;} = string.Empty;    
     [Required]
-    public DateTime CreationDate {get; set;}
-    public DateTime UpdateDate {get; set;}
+    public DateTime CreationDate {get; set;} = DateTime.Now;
+    public DateTime? UpdateDate {get; set;} = null;
 
     //CONEXION DE RELACIONES 
     public int CategoryId {get; set;}
