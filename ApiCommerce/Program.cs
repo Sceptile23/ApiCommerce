@@ -8,7 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var DBConnectionString = builder.Configuration.GetConnectionString("ConexionSql");
 builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(DBConnectionString));
+
+//APARTADO PARA CATEGORIA
 builder.Services.AddScoped<ICategoryRepository, categoryRepository>();
+
+//APARTADO PARA PRODUCTOS
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+//PARA QUE SE PUEDE HACER EL AUTOMAPEO
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddControllers();
