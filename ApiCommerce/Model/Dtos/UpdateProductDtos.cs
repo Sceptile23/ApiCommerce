@@ -10,6 +10,5 @@ public class UpdateProductDtos
     public int Stock {get; set;}
     public string imagUrl {get; set;} = string.Empty;
     public string SKU {get; set;} = string.Empty;    
-    public DateTime? UpdateDate {get; set;} = null;
     public int CategoryId {get; set;}
 }

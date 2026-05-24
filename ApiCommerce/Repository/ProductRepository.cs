@@ -4,6 +4,7 @@ using ApiCommerce.Model;
 using System.Linq.Expressions;
 using ApiCommerce.Model.Dtos;
 using Microsoft.Identity.Client;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace ApiCommerce.Repository;
@@ -22,7 +23,7 @@ public class ProductRepository : IProductRepository
     //AHORA PODEMOS CREAR LOS METODOS PARA MANEJAR LOS PRODUCTOS
     public ICollection<Product> GetProducts()
     {
-        var products = _db.Products.OrderBy(p => p.Name).ToList();
+        var products = _db.Products.Include(p => p.category).OrderBy(p => p.Name).ToList();
         return products;
     }
 
@@ -32,7 +33,7 @@ public class ProductRepository : IProductRepository
         {
             return new List<Product>();
         }
-        var products = _db.Products.Where(p => p.CategoryId == categoryId).ToList();
+        var products = _db.Products.Include(p => p.category).Where(p => p.CategoryId == categoryId).ToList();
         return products;
     }
 
@@ -42,14 +43,14 @@ public class ProductRepository : IProductRepository
         IQueryable<Product> query = _db.Products;
         if (!string.IsNullOrEmpty(name))
         {
-            query = query.Where(p => p.Name.ToLower().Trim() == name.ToLower().Trim());
+            query = query.Include(p => p.category).Where(p => p.Name.ToLower().Trim().Contains(name.ToLower().Trim()) || p.Description.ToLower().Trim().Contains(name.ToLower().Trim()) );
         }
         return query.ToList();
     }
 
     public Product? GetProduct(int id)
     {
-        var product = _db.Products.FirstOrDefault(p => p.ProductId == id);
+        var product = _db.Products.Include(p => p.category).FirstOrDefault(p => p.ProductId == id);
         return product;
     }
 
@@ -63,12 +64,12 @@ public class ProductRepository : IProductRepository
         var product = _db.Products.FirstOrDefault(p => p.Name == name);
         if (product == null)
         {
-            throw new ArgumentException("Product not found");
+            return false;
         }
 
         if (product.Stock < amount)
         {
-            throw new ArgumentException("no enough stock");
+            return false;       
         }
 
         product.Stock -= amount;
