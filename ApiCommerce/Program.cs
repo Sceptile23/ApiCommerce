@@ -14,6 +14,7 @@ builder.Services.AddScoped<ICategoryRepository, categoryRepository>();
 
 //APARTADO PARA PRODUCTOS
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IUserRepository, userRepository>();
 
 //PARA QUE SE PUEDE HACER EL AUTOMAPEO
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
