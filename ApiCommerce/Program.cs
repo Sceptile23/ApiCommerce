@@ -24,6 +24,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//CONFIGURACION CORS 
+builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowFrontend",
+        
+        policy =>
+        {
+            policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+        });
+    }
+);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,5 +50,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+//USO DE LA CONFIGURACION BASICA DE CORS 
+app.UseCors("AllowFrontend");
 
 app.Run();
