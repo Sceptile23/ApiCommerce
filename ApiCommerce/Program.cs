@@ -2,11 +2,21 @@ using ApiCommerce.Repository;
 using ApiCommerce.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using ApiCommerce.Constants.Policy;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var DBConnectionString = builder.Configuration.GetConnectionString("ConexionSql");
+var securityKey = builder.Configuration.GetValue<string>("ApiSettings:SecretKey");
+if (string.IsNullOrWhiteSpace(securityKey))
+{
+    throw new InvalidOperationException("SecretKey no configurado.");
+}
+
 builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(DBConnectionString));
 
 //APARTADO PARA CATEGORIA
@@ -18,6 +28,24 @@ builder.Services.AddScoped<IUserRepository, userRepository>();
 
 //PARA QUE SE PUEDE HACER EL AUTOMAPEO
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey)),
+        ValidateIssuer = false,
+        ValidateAudience = true,
+    };
+})
+;
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -52,6 +80,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 //USO DE LA CONFIGURACION BASICA DE CORS 
-app.UseCors("AllowFrontend");
+app.UseCors(PolicyName.AllowFrontend);
 
 app.Run();
