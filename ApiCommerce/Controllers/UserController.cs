@@ -2,11 +2,13 @@ using System;
 using ApiCommerce.Model.Dtos;
 using ApiCommerce.Repository.IRepository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace ApiCommerce.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -22,7 +24,6 @@ namespace ApiCommerce.Controllers
         }
 
         //ESPACIOS PARA CONTROLADORES 
-        //? METODOS A CREAR (getUser, Register, Login)
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -57,6 +58,7 @@ namespace ApiCommerce.Controllers
             return Ok(userDto);
         }
 
+        [AllowAnonymous]
         [HttpPost (Name = "Register")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -86,6 +88,7 @@ namespace ApiCommerce.Controllers
             return CreatedAtRoute("GetUser", new {id = user.Id}, user);
         }
 
+        [AllowAnonymous]
         [HttpPost ("Login",Name = "Login")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

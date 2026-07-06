@@ -5,12 +5,14 @@ using ApiCommerce.Model.Dtos;
 using ApiCommerce.Repository;
 using ApiCommerce.Repository.IRepository;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiCommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize (Roles = "Admin")]
     public class ProductsController : ControllerBase
     {
         //instanciamos dos inyecciones de dependencias claves
@@ -27,6 +29,7 @@ namespace ApiCommerce.Controllers
         }
 
         //CREACIÓN DE CADA ENDPOINT
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -39,6 +42,7 @@ namespace ApiCommerce.Controllers
             return Ok(productsDtos);
         }
 
+        [AllowAnonymous]
         [HttpGet("{productId:int}", Name = "GetProduct")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -91,6 +95,7 @@ namespace ApiCommerce.Controllers
             return CreatedAtRoute("GetProduct", new {productId = product.ProductId}, productDto);
         }
 
+        [AllowAnonymous]
         [HttpGet ("Category/{categoryID:int}", Name = "GetProductForCategory")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -112,7 +117,8 @@ namespace ApiCommerce.Controllers
             return Ok(productDtos);
         }
 
-        [HttpGet ("searchByNameProducr/{name}", Name = "SearchProduct")]
+        [AllowAnonymous]
+        [HttpGet ("searchByNameProduct/{name}", Name = "SearchProduct")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

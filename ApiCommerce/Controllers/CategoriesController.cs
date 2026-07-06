@@ -8,12 +8,14 @@ using ApiCommerce.Model.Dtos;
 using ApiCommerce.Mapping.CategoryProfile;
 using Microsoft.AspNetCore.Cors;
 using ApiCommerce.Constants.Policy;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiCommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors (PolicyName.AllowFrontend)]
+    // [EnableCors (PolicyName.AllowFrontend)]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
@@ -25,11 +27,11 @@ namespace ApiCommerce.Controllers
             this._mapper = mapper;
         }
 
-
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [EnableCors (PolicyName.AllowFrontend)]
+        // [EnableCors (PolicyName.AllowFrontend)]
         public IActionResult GetCategories()
         {
             var categories = _categoryRepository.GetCategories();
@@ -41,6 +43,7 @@ namespace ApiCommerce.Controllers
             return Ok(categoriesDto);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id:int}", Name = "GetCategory")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
